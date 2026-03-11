@@ -1,5 +1,7 @@
 const express = require("express"); //imports express framework
 const cors = require("cors"); //imports cors middleware
+require("dotenv").config();
+const PORT = process.env.PORT || 5000;
 
 const app = express() //create express application instance that will be web server
 
@@ -12,6 +14,6 @@ app.get("/", (req, res) => {
     res.send("DevTrack API running");
 });
 
-app.listen(5000, ()=> {
-    console.log("Server running on Port 5000");
+app.listen(PORT, ()=> {
+    console.log(`Server Running on Port ${PORT}`);
 });
