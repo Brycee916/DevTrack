@@ -8,6 +8,8 @@ const app = express() //create express application instance that will be web ser
 app.use(cors()); //enables cross origin resource sharing, allowing server to accept requests from different domains
 app.use(express.json()); //adds middleware that automatically parses incoming json request bodies
 
+const authRoutes = require("./routes/authRoutes");
+app.use("/api/auth", authRoutes);
 
 // APIs
 app.get("/", (req, res) => {
