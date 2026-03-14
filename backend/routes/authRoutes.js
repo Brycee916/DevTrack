@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
+    const salt = 10
 
     try{
         // deconstruct and get the email and password from request body
@@ -15,7 +16,7 @@ router.post("/register", async (req, res) => {
         }
 
         // has the password with a salt of 10
-        const hash = await bcrypt.hash(password, 10);
+        const hash = await bcrypt.hash(password, salt);
 
         // parameterized query to prevent sql injection. these values inserted are treated as string, not sql cmds
         // returns all columns of inserted row such as id, email, hash, and created at
