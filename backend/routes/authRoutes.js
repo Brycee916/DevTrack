@@ -18,13 +18,16 @@ router.post("/register", async (req, res) => {
         // has the password with a salt of 10
         const hash = await bcrypt.hash(password, salt);
 
+        // case check the email
+        const lowerCaseEmail = email.toLowerCase();
+
         // first check if that user already exists in the database by their email
         const userExists = await pool.query(
             "SELECT email FROM users WHERE email=$1",
-            [email]
+            [lowerCaseEmail]
         );
         if (userExists.rows[0]){
-            console.log(userExists.rows[0]);
+            console.log(`User already exists ${userExists.rows[0].email}`);
             return res.status(401).json({ error: "User already exists" });
         }
 
@@ -32,7 +35,7 @@ router.post("/register", async (req, res) => {
         // returns all columns of inserted row such as id, email, hash, and created at
         const result = await pool.query(
             "INSERT INTO users (email, password_hash) VALUES ($1,$2) RETURNING *",
-            [email, hash]
+            [lowerCaseEmail, hash]
         );
 
         if (!result.rows[0]){
@@ -43,8 +46,6 @@ router.post("/register", async (req, res) => {
         return res.status(201).json(result.rows[0]);
         
     } catch(error) {
-        console.error(error);
-
         //http server error code
         return res.status(500).json({ error: "Server error" });
     }
