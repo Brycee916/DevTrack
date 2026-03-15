@@ -56,8 +56,35 @@ router.post("/register", async (req, res) => {
 });
 
 
-router.post("/login", (req, res) => {
-    
+router.post("/login", async (req, res) => {
+    try{
+        const {email, password} = req.body;
+        // case normalize and check if email exists
+        const lowerCaseEmail = email.toLowerCase();
+        const emailExists = await pool.query("SELECT email From users WHERE email=$1",
+            [lowerCaseEmail]
+        );
+        if (emailExists.rows[0].email !== lowerCaseEmail){
+            console.log(`${email} does not exist`);
+            res.status(404).json({ error: "Email does not exist" });
+        }
+        //email does exist so check if hashed password was correct
+        console.log(`${email} does exist`);
+        const savedHashedPassword = await pool.query("SELECT password_hash FROM users WHERE email=$1",
+            [lowerCaseEmail]
+        );
+        const match = await bcrypt.compareSync(password, savedHashedPassword.rows[0].password_hash);
+        if (!match){
+            return res.status(404).json({ error: "Incorrect password" });
+        }
+
+        return res.status(200).json({ success: "Logged in" });
+
+    } catch (error){
+        return res.status(500).json({ error: "Server error" });
+    }
+
+
 
 });
 
