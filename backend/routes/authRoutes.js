@@ -60,6 +60,9 @@ router.post("/login", (req, res) => {
 
 });
 
-
+router.get("/getAllUsers", async (req, res) => {
+    const allUsers = await pool.query("SELECT email, created_at FROM users");
+    return res.status(200).json(allUsers.rows);
+});
 
 module.exports = router;
