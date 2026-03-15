@@ -18,6 +18,16 @@ router.post("/register", async (req, res) => {
         // has the password with a salt of 10
         const hash = await bcrypt.hash(password, salt);
 
+        // first check if that user already exists in the database by their email
+        const userExists = await pool.query(
+            "SELECT email FROM users WHERE email=$1",
+            [email]
+        );
+        if (userExists.rows[0]){
+            console.log(userExists.rows[0]);
+            return res.status(401).json({ error: "User already exists" });
+        }
+
         // parameterized query to prevent sql injection. these values inserted are treated as string, not sql cmds
         // returns all columns of inserted row such as id, email, hash, and created at
         const result = await pool.query(
@@ -28,7 +38,7 @@ router.post("/register", async (req, res) => {
         if (!result.rows[0]){
             return res.status(400).json({ error: "Failed to create user"});
         }
-        
+        console.log(`Created new user ${result.rows[0].email}`);
         //http created status code
         return res.status(201).json(result.rows[0]);
         
