@@ -43,7 +43,10 @@ router.post("/register", async (req, res) => {
         }
         console.log(`Created new user ${result.rows[0].email}`);
         //http created status code
-        return res.status(201).json(result.rows[0]);
+        return res.status(201).json({
+            email: result.rows[0].email,
+            created_at: result.rows[0].created_at
+        });
         
     } catch(error) {
         //http server error code
