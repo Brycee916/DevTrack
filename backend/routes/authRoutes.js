@@ -2,11 +2,12 @@ const express = require("express");
 const pool = require("../db/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
-    const salt = 10
+    const salt = Number(process.env.SALT);
 
     try{
         // deconstruct and get the email and password from request body
