@@ -3,7 +3,7 @@ const pool = require("../db/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
+const authMiddleware = require("../middleware/authMiddleware");
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
@@ -93,7 +93,7 @@ router.post("/login", async (req, res) => {
     }
 });
 
-router.get("/getAllUsers", async (req, res) => {
+router.get("/getAllUsers", authMiddleware, async (req, res) => {
     const allUsers = await pool.query("SELECT email, created_at FROM users");
     return res.status(200).json(allUsers.rows);
 });
