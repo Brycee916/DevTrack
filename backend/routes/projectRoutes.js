@@ -3,6 +3,7 @@ const pool = require("../db/db");
 const authMiddleware = require("../middleware/authMiddleware");
 const router = express.Router();
 
+// Create a project
 router.post("/", authMiddleware, async (req, res) => {
 
     try {
@@ -22,5 +23,11 @@ router.post("/", authMiddleware, async (req, res) => {
     }
 
 });
+
+// Get user projects
+
+
+// Delete a project
+
 
 module.exports = router;
