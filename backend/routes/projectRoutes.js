@@ -25,7 +25,15 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // Get user projects
+router.get("/getAll", authMiddleware, async (req, res) => {
+    const userId = req.user.id;
+    
+    const projects = await pool.query("SELECT title, description, created_at FROM projects WHERE user_id=$1",
+        [userId]
+    );
 
+    res.json(projects.rows);
+});
 
 // Delete a project
 
