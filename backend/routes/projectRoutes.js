@@ -28,14 +28,35 @@ router.post("/", authMiddleware, async (req, res) => {
 router.get("/getAll", authMiddleware, async (req, res) => {
     const userId = req.user.id;
     
-    const projects = await pool.query("SELECT title, description, created_at FROM projects WHERE user_id=$1",
-        [userId]
-    );
+    try{
+        const projects = await pool.query("SELECT id, title, description, created_at FROM projects WHERE user_id=$1",
+            [userId]
+        );
 
-    res.json(projects.rows);
+        res.json(projects.rows);
+    } catch (error){
+        return res.status(404).json({ error: "Server error" });
+    }
+    
 });
 
 // Delete a project
+router.delete("/deleteProjectId=:id", authMiddleware, async (req, res) => {
+    const userId = req.user.id;
+    const projectId = req.params.id;
+
+    try {
+        const result = await pool.query("DELETE FROM projects WHERE id=$1 AND user_id=$2",
+            [projectId, userId]
+        );
+
+        res.json({ success: "Project deleted" });
+
+    } catch (error) {
+        return res.status(404).json({ error: "Server error" });
+    }
+
+});
 
 
 module.exports = router;
