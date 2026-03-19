@@ -58,5 +58,9 @@ router.delete("/deleteProjectId=:id", authMiddleware, async (req, res) => {
 
 });
 
+// Update project - status (active/complete), priority (low/medium/high)
+
+
+
 
 module.exports = router;
