@@ -3,16 +3,16 @@ const pool = require("../db/db");
 const authMiddleware = require("../middleware/authMiddleware");
 const router = express.Router();
 
-// Create a project
+// Create a project, make sure to check if selected status and priority is...
 router.post("/", authMiddleware, async (req, res) => {
 
     try {
         const userId = req.user.id; //comes from authMiddleware Jwt
-        const { title, description } = req.body;
+        const { title, description, status, priority } = req.body;
 
         // Create a new project in the table
-        const project = await pool.query("INSERT INTO projects (user_id, title, description) VALUES ($1, $2, $3) RETURNING *",
-            [userId, title, description]
+        const project = await pool.query("INSERT INTO projects (user_id, title, description, status, priority) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+            [userId, title, description, status, priority]
         );
 
         console.log(`Created new project ${JSON.stringify(project.rows[0])}`);
@@ -29,7 +29,7 @@ router.get("/getAll", authMiddleware, async (req, res) => {
     const userId = req.user.id;
     
     try{
-        const projects = await pool.query("SELECT id, title, description, created_at FROM projects WHERE user_id=$1",
+        const projects = await pool.query("SELECT id, title, description, created_at, status, priority FROM projects WHERE user_id=$1",
             [userId]
         );
 
@@ -58,7 +58,7 @@ router.delete("/deleteProjectId=:id", authMiddleware, async (req, res) => {
 
 });
 
-// Update project - status (active/complete), priority (low/medium/high)
+// Update project - status (active/complete), priority (low/medium/high). in frontend, if it's active then shouldnt need priority
 
 
 
