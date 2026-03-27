@@ -26,7 +26,6 @@ The backend is a Node/Express/PostgreSQL app with auth + project management endp
 - `PUT /api/project/updateProjectId=:id` update project by id
 
 ## Immediate Code Fixes and Stabilization
-- `projectRoutes` has SQL bug in update: `UPDATE TABLE projects` should be `UPDATE projects SET ...`
 - normalize routes to REST style (`/api/project/:id`)
 - add validation (Joi/Zod), strong enums for status and priority
 - combine queries in login and reduce user enumeration risk

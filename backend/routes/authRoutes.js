@@ -70,10 +70,8 @@ router.post("/login", async (req, res) => {
         }
         // email does exist so check if hashed password was correct
         console.log(`${email} does exist`);
-        const savedHashedPassword = await pool.query("SELECT password_hash FROM users WHERE email=$1",
-            [lowerCaseEmail]
-        );
-        const match = await bcrypt.compareSync(password, savedHashedPassword.rows[0].password_hash);
+        const savedHashedPassword = user.rows[0].password_hash;
+        const match = await bcrypt.compareSync(password, savedHashedPassword);
         if (!match){
             return res.status(404).json({ error: "Incorrect password" });
         }
