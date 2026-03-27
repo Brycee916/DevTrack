@@ -28,7 +28,6 @@ The backend is a Node/Express/PostgreSQL app with auth + project management endp
 ## Immediate Code Fixes and Stabilization
 - normalize routes to REST style (`/api/project/:id`)
 - add validation (Joi/Zod), strong enums for status and priority
-- combine queries in login and reduce user enumeration risk
 
 ## Enhancement / Business Ideas
 - team collaboration with roles (owner/editor/viewer)
