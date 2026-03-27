@@ -65,7 +65,7 @@ router.put("/updateProjectId=:id", authMiddleware, async (req, res) => {
     const { title, description, status, priority } = req.body;
 
     try {
-        const result = await pool.query("UPDATE TABLE projects SET title=$1, description=$2, status=$3, priority=$4 WHERE id=$5 and user_id=$6"
+        const result = await pool.query("UPDATE projects SET title=$1, description=$2, status=$3, priority=$4 WHERE id=$5 and user_id=$6"
             [title, description, status, priority, projectId, userId]
         );
         res.json({ success: "Project updated" });
