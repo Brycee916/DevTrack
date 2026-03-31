@@ -1,11 +1,11 @@
-.login-container {
+.register-container {
   min-height: 100vh;
   display: grid;
   place-items: center;
   padding: 24px;
 }
 
-.login-form {
+.register-form {
   width: min(100%, 420px);
   display: grid;
   gap: 16px;
@@ -17,13 +17,13 @@
   backdrop-filter: blur(14px);
 }
 
-.login-form h1 {
+.register-form h1 {
   margin: 0;
   font-size: 2rem;
   color: #0f172a;
 }
 
-.login-form p {
+.register-form p {
   margin: 0;
   color: #475569;
 }
@@ -66,7 +66,7 @@
   color: #047857;
 }
 
-.login-form button {
+.register-form button {
   border: 0;
   border-radius: 999px;
   padding: 12px 14px;
@@ -77,7 +77,7 @@
   cursor: pointer;
 }
 
-.login-form button:disabled {
+.register-form button:disabled {
   opacity: 0.7;
   cursor: wait;
 }

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import './Login.css'
+import { loginUser } from '../services/api'
 
-export default function Login({ apiBaseUrl }) {
+export default function Login({ onSwitchToRegister, onLoginSuccess }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -15,20 +16,9 @@ export default function Login({ apiBaseUrl }) {
     setLoading(true)
 
     try {
-      const response = await fetch(`${apiBaseUrl}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed')
-      }
-
-      localStorage.setItem('token', data.token)
-      setSuccess('Login successful. Token saved to localStorage.')
+      const data = await loginUser({ email, password })
+      setSuccess('Login successful. Redirecting to your dashboard.')
+      onLoginSuccess?.(data.token)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -70,6 +60,17 @@ export default function Login({ apiBaseUrl }) {
         <button type="submit" disabled={loading}>
           {loading ? 'Logging in...' : 'Login'}
         </button>
+
+        <p className="auth-switch">
+          New here?{' '}
+          <button
+            type="button"
+            className="auth-switch-button"
+            onClick={onSwitchToRegister}
+          >
+            Create an account
+          </button>
+        </p>
       </form>
     </div>
   )
