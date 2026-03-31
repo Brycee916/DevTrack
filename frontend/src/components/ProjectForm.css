@@ -3,6 +3,17 @@
   gap: 18px;
 }
 
+.editor-panel {
+  position: sticky;
+  top: 20px;
+}
+
+.panel-copy {
+  margin: 8px 0 0;
+  color: #6b7280;
+  line-height: 1.55;
+}
+
 .form-actions {
   display: flex;
   gap: 12px;
@@ -32,11 +43,11 @@
   width: 100%;
   box-sizing: border-box;
   border: 1px solid #d1d5db;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 11px 13px;
   font: inherit;
   color: #111827;
-  background: #ffffff;
+  background: #f8fafc;
 }
 
 .field textarea {

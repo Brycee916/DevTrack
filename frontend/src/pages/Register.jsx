@@ -40,64 +40,89 @@ export default function Register({ onSwitchToLogin, onRegisterSuccess }) {
 
   return (
     <div className="register-container">
-      <form onSubmit={handleSubmit} className="register-form">
-        <div className="auth-header">
+      <section className="auth-layout">
+        <aside className="auth-panel">
           <span className="auth-brand">DevTrack</span>
-          <h1>Create account</h1>
-          <p>Set up a workspace account for project tracking and reporting.</p>
-        </div>
+          <h1>Set up your workspace account.</h1>
+          <p className="auth-copy">
+            Create an account to start organizing projects, assigning priorities,
+            and keeping progress visible for the team.
+          </p>
 
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
+          <div className="auth-points">
+            <div className="auth-point">
+              <strong>Simple onboarding</strong>
+              <span>Register once and access your project workspace instantly.</span>
+            </div>
+            <div className="auth-point">
+              <strong>Structured project data</strong>
+              <span>Maintain cleaner records for status, scope, and urgency.</span>
+            </div>
+            <div className="auth-point">
+              <strong>Built for delivery</strong>
+              <span>Keep teams focused on execution instead of scattered notes.</span>
+            </div>
+          </div>
+        </aside>
 
-        <div className="form-group">
-          <label htmlFor="register-email">Email</label>
-          <input
-            id="register-email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="register-form">
+          <div className="auth-header">
+            <h2>Create account</h2>
+            <p>Enter your details to open a new workspace account.</p>
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="register-password">Password</label>
-          <input
-            id="register-password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
 
-        <div className="form-group">
-          <label htmlFor="register-confirm-password">Confirm Password</label>
-          <input
-            id="register-confirm-password"
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="register-email">Work email</label>
+            <input
+              id="register-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Creating account...' : 'Register'}
-        </button>
+          <div className="form-group">
+            <label htmlFor="register-password">Password</label>
+            <input
+              id="register-password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        <p className="auth-switch">
-          Already have an account?{' '}
-          <button
-            type="button"
-            className="auth-switch-button"
-            onClick={onSwitchToLogin}
-          >
-            Go to login
+          <div className="form-group">
+            <label htmlFor="register-confirm-password">Confirm password</label>
+            <input
+              id="register-confirm-password"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button type="submit" disabled={loading}>
+            {loading ? 'Creating account...' : 'Create account'}
           </button>
-        </p>
-      </form>
+
+          <p className="auth-switch">
+            Already have an account?{' '}
+            <button
+              type="button"
+              className="auth-switch-button"
+              onClick={onSwitchToLogin}
+            >
+              Sign in
+            </button>
+          </p>
+        </form>
+      </section>
     </div>
   )
 }

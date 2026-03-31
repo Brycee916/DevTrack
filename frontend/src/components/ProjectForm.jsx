@@ -45,15 +45,17 @@ export default function ProjectForm({
   }
 
   return (
-    <section className="panel">
+    <section className="editor-panel panel">
       <div className="panel-header">
         <div>
-          <p className="eyebrow">Project Intake</p>
+          <p className="eyebrow">{editingProject ? 'Editor' : 'Add Project'}</p>
           <h2>
-            {editingProject
-              ? 'Update the details and keep it moving'
-              : 'Start something worth shipping'}
+            {editingProject ? 'Update project details' : 'Create a new project card'}
           </h2>
+          <p className="panel-copy">
+            Drag cards between board columns to update status. Use this panel to
+            create new cards or edit project details when needed.
+          </p>
         </div>
       </div>
 
@@ -64,7 +66,7 @@ export default function ProjectForm({
             name="title"
             value={form.title}
             onChange={handleChange}
-            placeholder="Launch landing page redesign"
+            placeholder="Enterprise onboarding launch"
             required
           />
         </label>
@@ -76,7 +78,7 @@ export default function ProjectForm({
             value={form.description}
             onChange={handleChange}
             rows="4"
-            placeholder="Capture the goal, scope, and next milestone."
+            placeholder="Add context, deliverables, stakeholders, and the next milestone."
             required
           />
         </label>

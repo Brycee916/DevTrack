@@ -13,7 +13,10 @@ export default function Dashboard({ token, onLogout }) {
   const [loadingProjects, setLoadingProjects] = useState(true)
   const [savingProject, setSavingProject] = useState(false)
   const [deletingProjectId, setDeletingProjectId] = useState(null)
+  const [movingProjectId, setMovingProjectId] = useState(null)
   const [editingProject, setEditingProject] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
@@ -96,6 +99,53 @@ export default function Dashboard({ token, onLogout }) {
     }
   }
 
+  const handleMoveProject = async (projectId, nextStatus) => {
+    const projectToMove = projects.find((project) => project.id === projectId)
+
+    if (!projectToMove || projectToMove.status === nextStatus) {
+      return false
+    }
+
+    setError('')
+    setSuccess('')
+    setMovingProjectId(projectId)
+
+    try {
+      const updatedProject = await updateProject(token, projectId, {
+        title: projectToMove.title,
+        description: projectToMove.description,
+        status: nextStatus,
+        priority: projectToMove.priority,
+      })
+
+      setProjects((current) =>
+        current.map((project) =>
+          project.id === updatedProject.id ? updatedProject : project
+        )
+      )
+
+      if (editingProject?.id === projectId) {
+        setEditingProject(updatedProject)
+      }
+
+      setSuccess(
+        nextStatus === 'complete'
+          ? 'Project moved to Completed.'
+          : 'Project moved to In Progress.'
+      )
+      return true
+    } catch (err) {
+      if (err.status === 401) {
+        onLogout()
+        return false
+      }
+      setError(err.message)
+      return false
+    } finally {
+      setMovingProjectId(null)
+    }
+  }
+
   const handleEditProject = (project) => {
     setError('')
     setSuccess('')
@@ -108,22 +158,35 @@ export default function Dashboard({ token, onLogout }) {
 
   const completedCount = projects.filter((project) => project.status === 'complete').length
   const activeCount = projects.length - completedCount
+  const highPriorityCount = projects.filter((project) => project.priority === 'high').length
+  const filteredProjects = projects.filter((project) => {
+    const matchesSearch =
+      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === 'all' || project.status === statusFilter
+
+    return matchesSearch && matchesStatus
+  })
 
   return (
     <div className="dashboard-shell">
-      <header className="dashboard-hero">
-        <div>
-          <p className="eyebrow">Workspace Overview</p>
-          <h1>Project operations, in one place.</h1>
-          <p className="hero-copy">
-            Monitor active work, update priorities, and maintain a clear view
-            of delivery across your portfolio.
-          </p>
+      <header className="workspace-topbar panel">
+        <div className="workspace-branding">
+          <div className="workspace-logo">DT</div>
+          <div>
+            <p className="eyebrow">Portfolio Workspace</p>
+            <h1>DevTrack</h1>
+          </div>
         </div>
 
-        <div className="hero-actions">
+        <div className="workspace-topbar-copy">
+          <strong>Delivery board</strong>
+          <span>Project visibility for product, operations, and client work.</span>
+        </div>
+
+        <div className="workspace-actions">
           <button className="ghost-button" type="button" onClick={loadProjects}>
-            Refresh
+            Refresh board
           </button>
           <button className="primary-button" type="button" onClick={onLogout}>
             Log out
@@ -131,39 +194,89 @@ export default function Dashboard({ token, onLogout }) {
         </div>
       </header>
 
-      <section className="stats-grid">
-        <article className="stat-card">
-          <span>Total projects</span>
-          <strong>{projects.length}</strong>
-        </article>
-        <article className="stat-card">
-          <span>Active</span>
-          <strong>{activeCount}</strong>
-        </article>
-        <article className="stat-card">
-          <span>Completed</span>
-          <strong>{completedCount}</strong>
-        </article>
-      </section>
+      <div className="workspace-layout">
+        <aside className="workspace-sidebar panel">
+          <div className="sidebar-section">
+            <p className="eyebrow">Workspace</p>
+            <h2>Board overview</h2>
+            <p className="sidebar-copy">
+              Track execution, see what needs attention, and update project
+              details from one shared operational board.
+            </p>
+          </div>
 
-      {error && <div className="app-message error-message">{error}</div>}
-      {success && <div className="app-message success-message">{success}</div>}
+          <nav className="sidebar-nav">
+            <button className="sidebar-nav-item sidebar-nav-item-active" type="button">
+              Board
+            </button>
+            <button className="sidebar-nav-item" type="button">
+              Roadmap
+            </button>
+            <button className="sidebar-nav-item" type="button">
+              Reporting
+            </button>
+          </nav>
 
-      <div className="dashboard-grid">
-        <ProjectForm
-          editingProject={editingProject}
-          loading={savingProject}
-          onCancelEdit={handleCancelEdit}
-          onSubmitProject={handleSubmitProject}
-        />
-        <ProjectList
-          editingProjectId={editingProject?.id}
-          onEdit={handleEditProject}
-          projects={projects}
-          loading={loadingProjects}
-          deletingProjectId={deletingProjectId}
-          onDelete={handleDeleteProject}
-        />
+          <div className="sidebar-section">
+            <p className="eyebrow">Metrics</p>
+            <div className="stats-grid">
+              <article className="stat-card">
+                <span>Total projects</span>
+                <strong>{projects.length}</strong>
+              </article>
+              <article className="stat-card">
+                <span>Active</span>
+                <strong>{activeCount}</strong>
+              </article>
+              <article className="stat-card">
+                <span>Completed</span>
+                <strong>{completedCount}</strong>
+              </article>
+              <article className="stat-card">
+                <span>High priority</span>
+                <strong>{highPriorityCount}</strong>
+              </article>
+            </div>
+          </div>
+
+          <div className="sidebar-section sidebar-callout">
+            <p className="eyebrow">Operations</p>
+            <h3>Investor-ready workflow</h3>
+            <p>
+              Structured tracking, visible priorities, and a board layout that
+              makes project progress easy to demo.
+            </p>
+          </div>
+        </aside>
+
+        <section className="workspace-main">
+          {error && <div className="app-message error-message">{error}</div>}
+          {success && <div className="app-message success-message">{success}</div>}
+
+          <div className="dashboard-grid">
+            <ProjectList
+              editingProjectId={editingProject?.id}
+              onEdit={handleEditProject}
+              onMoveProject={handleMoveProject}
+              projects={filteredProjects}
+              projectCount={projects.length}
+              searchTerm={searchTerm}
+              statusFilter={statusFilter}
+              onSearchChange={setSearchTerm}
+              onStatusFilterChange={setStatusFilter}
+              loading={loadingProjects}
+              deletingProjectId={deletingProjectId}
+              movingProjectId={movingProjectId}
+              onDelete={handleDeleteProject}
+            />
+            <ProjectForm
+              editingProject={editingProject}
+              loading={savingProject}
+              onCancelEdit={handleCancelEdit}
+              onSubmitProject={handleSubmitProject}
+            />
+          </div>
+        </section>
       </div>
     </div>
   )

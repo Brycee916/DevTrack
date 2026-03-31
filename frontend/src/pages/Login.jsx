@@ -28,53 +28,78 @@ export default function Login({ onSwitchToRegister, onLoginSuccess }) {
 
   return (
     <div className="login-container">
-      <form onSubmit={handleSubmit} className="login-form">
-        <div className="auth-header">
+      <section className="auth-layout">
+        <aside className="auth-panel">
           <span className="auth-brand">DevTrack</span>
-          <h1>Sign in</h1>
-          <p>Access your workspace and manage projects securely.</p>
-        </div>
+          <h1>Run projects with clarity.</h1>
+          <p className="auth-copy">
+            Track active work, update priorities, and keep delivery teams aligned
+            with a single shared workspace.
+          </p>
 
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
+          <div className="auth-points">
+            <div className="auth-point">
+              <strong>Centralized tracking</strong>
+              <span>Keep status, description, and priority in one place.</span>
+            </div>
+            <div className="auth-point">
+              <strong>Fast updates</strong>
+              <span>Edit projects quickly without losing context.</span>
+            </div>
+            <div className="auth-point">
+              <strong>Simple access</strong>
+              <span>Sign in and get straight to the work that matters.</span>
+            </div>
+          </div>
+        </aside>
 
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="auth-header">
+            <h2>Sign in</h2>
+            <p>Use your workspace credentials to continue.</p>
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
+          <div className="form-group">
+            <label htmlFor="email">Work email</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        <p className="auth-switch">
-          New here?{' '}
-          <button
-            type="button"
-            className="auth-switch-button"
-            onClick={onSwitchToRegister}
-          >
-            Create an account
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button type="submit" disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign in'}
           </button>
-        </p>
-      </form>
+
+          <p className="auth-switch">
+            New to DevTrack?{' '}
+            <button
+              type="button"
+              className="auth-switch-button"
+              onClick={onSwitchToRegister}
+            >
+              Create an account
+            </button>
+          </p>
+        </form>
+      </section>
     </div>
   )
 }
