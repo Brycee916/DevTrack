@@ -10,6 +10,7 @@
 
 .editor-modal-panel {
   padding: 18px;
+  border-radius: 6px;
 }
 
 .panel-copy {
@@ -20,8 +21,8 @@
 }
 
 .modal-close-button {
-  border: 1px solid #dfe1e6;
-  border-radius: 6px;
+  border: 1px solid #d7dee8;
+  border-radius: 4px;
   padding: 8px 10px;
   background: #ffffff;
   color: #172b4d;
@@ -60,12 +61,12 @@
 .field select {
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid #dfe1e6;
-  border-radius: 6px;
+  border: 1px solid #d7dee8;
+  border-radius: 4px;
   padding: 9px 10px;
   font: inherit;
   color: #172b4d;
-  background: #fafbfc;
+  background: #ffffff;
 }
 
 .field textarea {
@@ -81,9 +82,9 @@
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
-  outline: 2px solid rgba(37, 99, 235, 0.14);
+  outline: 2px solid rgba(31, 79, 209, 0.14);
   outline-offset: 1px;
-  border-color: #2563eb;
+  border-color: #1f4fd1;
 }
 
 @media (max-width: 700px) {

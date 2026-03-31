@@ -9,11 +9,13 @@ import {
 } from '../services/api'
 
 export default function Dashboard({ token, onLogout }) {
+  const [activeView, setActiveView] = useState('board')
   const [projects, setProjects] = useState([])
   const [loadingProjects, setLoadingProjects] = useState(true)
   const [savingProject, setSavingProject] = useState(false)
   const [deletingProjectId, setDeletingProjectId] = useState(null)
   const [movingProjectId, setMovingProjectId] = useState(null)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [editingProject, setEditingProject] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -42,6 +44,25 @@ export default function Dashboard({ token, onLogout }) {
     loadProjects()
   }, [token])
 
+  useEffect(() => {
+    if (!editingProject && !isCreateModalOpen) {
+      return
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        if (editingProject) {
+          setEditingProject(null)
+        } else if (isCreateModalOpen) {
+          setIsCreateModalOpen(false)
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [editingProject, isCreateModalOpen])
+
   const handleSubmitProject = async (project) => {
     setSavingProject(true)
     setError('')
@@ -62,6 +83,7 @@ export default function Dashboard({ token, onLogout }) {
 
       const newProject = await createProject(token, project)
       setProjects((current) => [newProject, ...current])
+      setIsCreateModalOpen(false)
       setSuccess('Project created successfully.')
       return true
     } catch (err) {
@@ -156,6 +178,17 @@ export default function Dashboard({ token, onLogout }) {
     setEditingProject(null)
   }
 
+  const handleOpenCreate = () => {
+    setError('')
+    setSuccess('')
+    setEditingProject(null)
+    setIsCreateModalOpen(true)
+  }
+
+  const handleCancelCreate = () => {
+    setIsCreateModalOpen(false)
+  }
+
   const completedCount = projects.filter((project) => project.status === 'complete').length
   const activeCount = projects.length - completedCount
   const highPriorityCount = projects.filter((project) => project.priority === 'high').length
@@ -167,6 +200,13 @@ export default function Dashboard({ token, onLogout }) {
 
     return matchesSearch && matchesStatus
   })
+
+  const viewTabs = [
+    { id: 'board', label: 'Board', iconClass: 'tab-icon-board' },
+    { id: 'timeline', label: 'Timeline', iconClass: 'tab-icon-timeline' },
+    { id: 'reports', label: 'Reports', iconClass: 'tab-icon-reports' },
+    { id: 'settings', label: 'Settings', iconClass: 'tab-icon-settings' },
+  ]
 
   return (
     <div className="dashboard-shell">
@@ -185,10 +225,13 @@ export default function Dashboard({ token, onLogout }) {
         </div>
 
         <div className="workspace-actions">
+          <button className="primary-button" type="button" onClick={handleOpenCreate}>
+            Create project
+          </button>
           <button className="ghost-button" type="button" onClick={loadProjects}>
             Refresh board
           </button>
-          <button className="primary-button" type="button" onClick={onLogout}>
+          <button className="ghost-button" type="button" onClick={onLogout}>
             Log out
           </button>
         </div>
@@ -222,18 +265,21 @@ export default function Dashboard({ token, onLogout }) {
         </div>
 
         <div className="workspace-tabs" role="tablist" aria-label="Workspace views">
-          <button className="workspace-tab workspace-tab-active" type="button" role="tab" aria-selected="true">
-            Board
-          </button>
-          <button className="workspace-tab" type="button" role="tab" aria-selected="false">
-            Timeline
-          </button>
-          <button className="workspace-tab" type="button" role="tab" aria-selected="false">
-            Reports
-          </button>
-          <button className="workspace-tab" type="button" role="tab" aria-selected="false">
-            Settings
-          </button>
+          {viewTabs.map((tab) => (
+            <button
+              key={tab.id}
+              className={`workspace-tab ${
+                activeView === tab.id ? 'workspace-tab-active' : ''
+              }`}
+              type="button"
+              role="tab"
+              aria-selected={activeView === tab.id}
+              onClick={() => setActiveView(tab.id)}
+            >
+              <span className={`workspace-tab-icon ${tab.iconClass}`} />
+              {tab.label}
+            </button>
+          ))}
         </div>
       </section>
 
@@ -241,22 +287,57 @@ export default function Dashboard({ token, onLogout }) {
         <aside className="workspace-sidebar panel">
           <div className="sidebar-section">
             <p className="eyebrow">Workspace</p>
-            <h2>Board overview</h2>
+            <h2>Portfolio operations</h2>
             <p className="sidebar-copy">
-              Track execution, see what needs attention, and update project
-              details from one shared operational board.
+              Manage delivery status, review priorities, and keep project
+              execution visible across teams.
             </p>
           </div>
 
           <nav className="sidebar-nav">
-            <button className="sidebar-nav-item sidebar-nav-item-active" type="button">
+            <button
+              className={`sidebar-nav-item ${
+                activeView === 'board' ? 'sidebar-nav-item-active' : ''
+              }`}
+              type="button"
+              onClick={() => setActiveView('board')}
+            >
+              <span className="sidebar-nav-icon" />
               Board
             </button>
-            <button className="sidebar-nav-item" type="button">
-              Roadmap
+            <button
+              className={`sidebar-nav-item ${
+                activeView === 'timeline' ? 'sidebar-nav-item-active' : ''
+              }`}
+              type="button"
+              onClick={() => setActiveView('timeline')}
+            >
+              <span className="sidebar-nav-icon" />
+              Timeline
+            </button>
+            <button
+              className={`sidebar-nav-item ${
+                activeView === 'reports' ? 'sidebar-nav-item-active' : ''
+              }`}
+              type="button"
+              onClick={() => setActiveView('reports')}
+            >
+              <span className="sidebar-nav-icon" />
+              Reporting
             </button>
             <button className="sidebar-nav-item" type="button">
-              Reporting
+              <span className="sidebar-nav-icon" />
+              Team
+            </button>
+            <button
+              className={`sidebar-nav-item ${
+                activeView === 'settings' ? 'sidebar-nav-item-active' : ''
+              }`}
+              type="button"
+              onClick={() => setActiveView('settings')}
+            >
+              <span className="sidebar-nav-icon" />
+              Settings
             </button>
           </nav>
 
@@ -282,13 +363,18 @@ export default function Dashboard({ token, onLogout }) {
             </div>
           </div>
 
-          <div className="sidebar-section sidebar-callout">
-            <p className="eyebrow">Operations</p>
-            <h3>Investor-ready workflow</h3>
-            <p>
-              Structured tracking, visible priorities, and a board layout that
-              makes project progress easy to demo.
-            </p>
+          <div className="sidebar-section">
+            <p className="eyebrow">Quick actions</p>
+            <div className="sidebar-action-list">
+              <button className="sidebar-action-button" type="button" onClick={handleOpenCreate}>
+                <span className="sidebar-action-icon" />
+                New project
+              </button>
+              <button className="sidebar-action-button" type="button" onClick={loadProjects}>
+                <span className="sidebar-action-icon" />
+                Refresh data
+              </button>
+            </div>
           </div>
         </aside>
 
@@ -296,30 +382,139 @@ export default function Dashboard({ token, onLogout }) {
           {error && <div className="app-message error-message">{error}</div>}
           {success && <div className="app-message success-message">{success}</div>}
 
-          <div className="dashboard-grid">
-            <ProjectList
-              onEdit={handleEditProject}
-              onMoveProject={handleMoveProject}
-              projects={filteredProjects}
-              projectCount={projects.length}
-              searchTerm={searchTerm}
-              statusFilter={statusFilter}
-              onSearchChange={setSearchTerm}
-              onStatusFilterChange={setStatusFilter}
-              loading={loadingProjects}
-              deletingProjectId={deletingProjectId}
-              movingProjectId={movingProjectId}
-              onDelete={handleDeleteProject}
-            />
+          {activeView === 'board' ? (
+            <div className="dashboard-grid">
+              <ProjectList
+                onEdit={handleEditProject}
+                onMoveProject={handleMoveProject}
+                projects={filteredProjects}
+                projectCount={projects.length}
+                searchTerm={searchTerm}
+                statusFilter={statusFilter}
+                onSearchChange={setSearchTerm}
+                onStatusFilterChange={setStatusFilter}
+                loading={loadingProjects}
+                deletingProjectId={deletingProjectId}
+                movingProjectId={movingProjectId}
+                onDelete={handleDeleteProject}
+              />
+            </div>
+          ) : activeView === 'timeline' ? (
+            <section className="view-panel panel">
+              <div className="panel-header">
+                <div>
+                  <p className="eyebrow">Timeline</p>
+                  <h2>Delivery sequencing</h2>
+                  <p className="panel-copy">
+                    Review which priorities are active now and which completed items
+                    are ready for retrospective reporting.
+                  </p>
+                </div>
+              </div>
+              <div className="timeline-list">
+                {projects.length === 0 ? (
+                  <div className="view-empty-state">No projects available for timeline view.</div>
+                ) : (
+                  projects.map((project) => (
+                    <article key={project.id} className="timeline-item">
+                      <div className="timeline-marker" />
+                      <div className="timeline-content">
+                        <h3>{project.title}</h3>
+                        <p>{project.description}</p>
+                        <div className="timeline-meta">
+                          <span className={`badge status-${project.status}`}>{project.status}</span>
+                          <span className={`badge priority-${project.priority}`}>
+                            {project.priority} priority
+                          </span>
+                        </div>
+                      </div>
+                    </article>
+                  ))
+                )}
+              </div>
+            </section>
+          ) : activeView === 'reports' ? (
+            <section className="view-panel panel">
+              <div className="panel-header">
+                <div>
+                  <p className="eyebrow">Reports</p>
+                  <h2>Portfolio reporting</h2>
+                  <p className="panel-copy">
+                    High-level operational metrics for leadership review and investor updates.
+                  </p>
+                </div>
+              </div>
+              <div className="report-grid">
+                <article className="report-card">
+                  <div className="report-card-icon report-icon-completion" />
+                  <span>Delivery completion rate</span>
+                  <strong>
+                    {projects.length === 0
+                      ? '0%'
+                      : `${Math.round((completedCount / projects.length) * 100)}%`}
+                  </strong>
+                </article>
+                <article className="report-card">
+                  <div className="report-card-icon report-icon-alert" />
+                  <span>Projects needing attention</span>
+                  <strong>{highPriorityCount}</strong>
+                </article>
+                <article className="report-card">
+                  <div className="report-card-icon report-icon-load" />
+                  <span>Open execution load</span>
+                  <strong>{activeCount}</strong>
+                </article>
+              </div>
+            </section>
+          ) : (
+            <section className="view-panel panel">
+              <div className="panel-header">
+                <div>
+                  <p className="eyebrow">Settings</p>
+                  <h2>Workspace preferences</h2>
+                  <p className="panel-copy">
+                    Configure how the portfolio board is presented to operators and stakeholders.
+                  </p>
+                </div>
+              </div>
+              <div className="settings-list">
+                <div className="settings-row">
+                  <span>Board mode</span>
+                  <strong>Kanban</strong>
+                </div>
+                <div className="settings-row">
+                  <span>Reporting cadence</span>
+                  <strong>Weekly</strong>
+                </div>
+                <div className="settings-row">
+                  <span>Priority scale</span>
+                  <strong>Low / Medium / High</strong>
+                </div>
+              </div>
+            </section>
+          )}
+        </section>
+      </div>
+
+      {isCreateModalOpen && (
+        <div className="project-modal-backdrop" onClick={handleCancelCreate}>
+          <div
+            className="project-modal"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="create-project-title"
+          >
             <ProjectForm
               editingProject={null}
+              isModal
               loading={savingProject}
-              onCancelEdit={handleCancelEdit}
+              onCancelEdit={handleCancelCreate}
               onSubmitProject={handleSubmitProject}
             />
           </div>
-        </section>
-      </div>
+        </div>
+      )}
 
       {editingProject && (
         <div className="project-modal-backdrop" onClick={handleCancelEdit}>

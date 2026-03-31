@@ -29,6 +29,14 @@ export default function Login({ onSwitchToRegister, onLoginSuccess }) {
   return (
     <div className="login-container">
       <section className="auth-layout">
+        <header className="auth-topbar">
+          <div className="auth-topbar-brand">
+            <span className="auth-topbar-logo">DT</span>
+            <span>DevTrack Workspace</span>
+          </div>
+          <span className="auth-topbar-status">Enterprise project operations</span>
+        </header>
+
         <aside className="auth-panel">
           <span className="auth-brand">DevTrack</span>
           <h1>Run projects with clarity.</h1>
@@ -55,6 +63,7 @@ export default function Login({ onSwitchToRegister, onLoginSuccess }) {
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="auth-header">
+            <p className="eyebrow">Sign in</p>
             <h2>Sign in</h2>
             <p>Use your workspace credentials to continue.</p>
           </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './ProjectForm.css'
 
 const initialForm = {
@@ -16,6 +16,7 @@ export default function ProjectForm({
   onSubmitProject,
 }) {
   const [form, setForm] = useState(initialForm)
+  const titleInputRef = useRef(null)
 
   useEffect(() => {
     if (editingProject) {
@@ -30,6 +31,12 @@ export default function ProjectForm({
 
     setForm(initialForm)
   }, [editingProject])
+
+  useEffect(() => {
+    if (isModal) {
+      titleInputRef.current?.focus()
+    }
+  }, [isModal, editingProject])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -64,7 +71,7 @@ export default function ProjectForm({
             className="modal-close-button"
             type="button"
             onClick={onCancelEdit}
-            aria-label="Close edit dialog"
+            aria-label={editingProject ? 'Close edit dialog' : 'Close create dialog'}
           >
             Close
           </button>
@@ -75,6 +82,7 @@ export default function ProjectForm({
         <label className="field">
           <span>Title</span>
           <input
+            ref={titleInputRef}
             name="title"
             value={form.title}
             onChange={handleChange}

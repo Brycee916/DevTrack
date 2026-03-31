@@ -41,6 +41,14 @@ export default function Register({ onSwitchToLogin, onRegisterSuccess }) {
   return (
     <div className="register-container">
       <section className="auth-layout">
+        <header className="auth-topbar">
+          <div className="auth-topbar-brand">
+            <span className="auth-topbar-logo">DT</span>
+            <span>DevTrack Workspace</span>
+          </div>
+          <span className="auth-topbar-status">Enterprise project operations</span>
+        </header>
+
         <aside className="auth-panel">
           <span className="auth-brand">DevTrack</span>
           <h1>Set up your workspace account.</h1>
@@ -67,6 +75,7 @@ export default function Register({ onSwitchToLogin, onRegisterSuccess }) {
 
         <form onSubmit={handleSubmit} className="register-form">
           <div className="auth-header">
+            <p className="eyebrow">Create account</p>
             <h2>Create account</h2>
             <p>Enter your details to open a new workspace account.</p>
           </div>

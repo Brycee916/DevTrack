@@ -9,11 +9,50 @@
   width: min(100%, 1040px);
   display: grid;
   grid-template-columns: minmax(280px, 1fr) minmax(360px, 440px);
-  border: 1px solid #dfe1e6;
+  grid-template-rows: auto 1fr;
+  border: 1px solid #d7dee8;
   border-radius: 10px;
   overflow: hidden;
+  background: #f8fafc;
+  box-shadow: 0 16px 36px rgba(23, 43, 77, 0.08);
+}
+
+.auth-topbar {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid #dfe5ec;
   background: #ffffff;
-  box-shadow: 0 1px 3px rgba(9, 30, 66, 0.13);
+}
+
+.auth-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #16324f;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.auth-topbar-logo {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  background: #1f4fd1;
+  color: #ffffff;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+}
+
+.auth-topbar-status {
+  color: #61748a;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .auth-panel {
@@ -21,8 +60,8 @@
   align-content: start;
   gap: 18px;
   padding: 36px;
-  background: linear-gradient(180deg, #0c66e4 0%, #0055cc 100%);
-  color: #f9fafb;
+  background: #eef3fb;
+  color: #16324f;
 }
 
 .register-form {
@@ -42,19 +81,19 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.82);
+  color: #6c7d90;
 }
 
 .auth-panel h1 {
   margin: 0;
   font-size: clamp(1.8rem, 4vw, 2.5rem);
-  color: #ffffff;
+  color: #16324f;
   line-height: 1.08;
 }
 
 .auth-copy {
   margin: 0;
-  color: rgba(255, 255, 255, 0.82);
+  color: #61748a;
   line-height: 1.55;
 }
 
@@ -67,27 +106,27 @@
   display: grid;
   gap: 4px;
   padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1px solid #dfe5ec;
 }
 
 .auth-point strong {
-  color: #ffffff;
+  color: #16324f;
 }
 
 .auth-point span {
-  color: #cbd5e1;
+  color: #61748a;
   line-height: 1.55;
 }
 
 .auth-header h2 {
   margin: 0;
   font-size: 1.5rem;
-  color: #172b4d;
+  color: #16324f;
 }
 
 .auth-header p {
   margin: 0;
-  color: #5e6c84;
+  color: #61748a;
   font-size: 0.92rem;
 }
 
@@ -98,52 +137,53 @@
 
 .form-group label {
   font-weight: 700;
-  color: #44546f;
+  color: #53657a;
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
 .form-group input {
-  border: 1px solid #dfe1e6;
+  border: 1px solid #d7dee8;
   border-radius: 6px;
   padding: 9px 10px;
   font-size: 1rem;
-  background: #fafbfc;
-  color: #172b4d;
+  background: #ffffff;
+  color: #16324f;
 }
 
 .form-group input:focus {
-  outline: 2px solid rgba(37, 99, 235, 0.14);
+  outline: 2px solid rgba(31, 79, 209, 0.14);
   outline-offset: 1px;
-  border-color: #2563eb;
+  border-color: #1f4fd1;
 }
 
 .error-message {
   padding: 10px 12px;
   border-radius: 6px;
-  border: 1px solid #ffd5d2;
-  background: #ffebe6;
+  border: 1px solid rgba(244, 114, 100, 0.22);
+  background: rgba(255, 237, 232, 0.82);
   color: #ae2a19;
 }
 
 .success-message {
   padding: 10px 12px;
   border-radius: 6px;
-  border: 1px solid #abf5d1;
-  background: #e3fcef;
-  color: #006644;
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  background: rgba(236, 253, 245, 0.82);
+  color: #0f766e;
 }
 
 .register-form button {
-  border: 1px solid #0c66e4;
+  border: 1px solid #1f4fd1;
   border-radius: 6px;
   padding: 9px 12px;
-  background: #0c66e4;
+  background: #1f4fd1;
   color: #ffffff;
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 8px 16px rgba(31, 79, 209, 0.14);
 }
 
 .register-form button:disabled {
@@ -154,7 +194,7 @@
 .auth-switch {
   margin: 0;
   text-align: center;
-  color: #5e6c84;
+  color: #61748a;
   font-size: 0.9rem;
 }
 
@@ -162,7 +202,7 @@
   border: 0;
   padding: 0;
   background: transparent;
-  color: #0c66e4;
+  color: #1f4fd1;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
@@ -175,6 +215,11 @@
 @media (max-width: 900px) {
   .auth-layout {
     grid-template-columns: 1fr;
+  }
+
+  .auth-topbar {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .auth-panel,
