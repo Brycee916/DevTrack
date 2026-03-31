@@ -10,6 +10,7 @@ const initialForm = {
 
 export default function ProjectForm({
   editingProject,
+  isModal = false,
   loading,
   onCancelEdit,
   onSubmitProject,
@@ -45,7 +46,7 @@ export default function ProjectForm({
   }
 
   return (
-    <section className="editor-panel panel">
+    <section className={`panel ${isModal ? 'editor-modal-panel' : 'editor-panel'}`}>
       <div className="panel-header">
         <div>
           <p className="eyebrow">{editingProject ? 'Editor' : 'Add Project'}</p>
@@ -57,6 +58,17 @@ export default function ProjectForm({
             create new cards or edit project details when needed.
           </p>
         </div>
+
+        {isModal && (
+          <button
+            className="modal-close-button"
+            type="button"
+            onClick={onCancelEdit}
+            aria-label="Close edit dialog"
+          >
+            Close
+          </button>
+        )}
       </div>
 
       <form className="project-form" onSubmit={handleSubmit}>

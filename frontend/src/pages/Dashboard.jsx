@@ -194,6 +194,49 @@ export default function Dashboard({ token, onLogout }) {
         </div>
       </header>
 
+      <section className="workspace-header panel">
+        <div className="workspace-header-main">
+          <div className="workspace-breadcrumbs" aria-label="Breadcrumb">
+            <span>Workspaces</span>
+            <span className="breadcrumb-separator">/</span>
+            <span>Portfolio</span>
+            <span className="breadcrumb-separator">/</span>
+            <span className="breadcrumb-current">DevTrack</span>
+          </div>
+
+          <div className="workspace-title-row">
+            <div>
+              <p className="eyebrow">Operations Board</p>
+              <h2>Delivery management</h2>
+            </div>
+            <div className="workspace-title-meta">
+              <span className="workspace-chip">Q2 Active Planning</span>
+              <span className="workspace-chip workspace-chip-muted">Investor Demo Ready</span>
+            </div>
+          </div>
+
+          <p className="workspace-summary">
+            Centralize active delivery work, surface high-priority projects, and
+            keep execution status ready for leadership reviews.
+          </p>
+        </div>
+
+        <div className="workspace-tabs" role="tablist" aria-label="Workspace views">
+          <button className="workspace-tab workspace-tab-active" type="button" role="tab" aria-selected="true">
+            Board
+          </button>
+          <button className="workspace-tab" type="button" role="tab" aria-selected="false">
+            Timeline
+          </button>
+          <button className="workspace-tab" type="button" role="tab" aria-selected="false">
+            Reports
+          </button>
+          <button className="workspace-tab" type="button" role="tab" aria-selected="false">
+            Settings
+          </button>
+        </div>
+      </section>
+
       <div className="workspace-layout">
         <aside className="workspace-sidebar panel">
           <div className="sidebar-section">
@@ -255,7 +298,6 @@ export default function Dashboard({ token, onLogout }) {
 
           <div className="dashboard-grid">
             <ProjectList
-              editingProjectId={editingProject?.id}
               onEdit={handleEditProject}
               onMoveProject={handleMoveProject}
               projects={filteredProjects}
@@ -270,7 +312,7 @@ export default function Dashboard({ token, onLogout }) {
               onDelete={handleDeleteProject}
             />
             <ProjectForm
-              editingProject={editingProject}
+              editingProject={null}
               loading={savingProject}
               onCancelEdit={handleCancelEdit}
               onSubmitProject={handleSubmitProject}
@@ -278,6 +320,26 @@ export default function Dashboard({ token, onLogout }) {
           </div>
         </section>
       </div>
+
+      {editingProject && (
+        <div className="project-modal-backdrop" onClick={handleCancelEdit}>
+          <div
+            className="project-modal"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="edit-project-title"
+          >
+            <ProjectForm
+              editingProject={editingProject}
+              isModal
+              loading={savingProject}
+              onCancelEdit={handleCancelEdit}
+              onSubmitProject={handleSubmitProject}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

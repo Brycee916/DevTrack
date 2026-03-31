@@ -2,33 +2,33 @@
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 20px;
+  padding: 16px;
 }
 
 .auth-layout {
   width: min(100%, 1040px);
   display: grid;
   grid-template-columns: minmax(280px, 1fr) minmax(360px, 440px);
-  border: 1px solid #e5e7eb;
-  border-radius: 20px;
+  border: 1px solid #dfe1e6;
+  border-radius: 10px;
   overflow: hidden;
   background: #ffffff;
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 1px 3px rgba(9, 30, 66, 0.13);
 }
 
 .auth-panel {
   display: grid;
   align-content: start;
-  gap: 22px;
-  padding: 48px;
-  background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
+  gap: 18px;
+  padding: 36px;
+  background: linear-gradient(180deg, #0c66e4 0%, #0055cc 100%);
   color: #f9fafb;
 }
 
 .register-form {
   display: grid;
-  gap: 18px;
-  padding: 48px;
+  gap: 14px;
+  padding: 36px;
   background: #ffffff;
 }
 
@@ -38,37 +38,36 @@
 }
 
 .auth-brand {
-  font-size: 0.8rem;
+  font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #cbd5e1;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .auth-panel h1 {
   margin: 0;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
   color: #ffffff;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
+  line-height: 1.08;
 }
 
 .auth-copy {
   margin: 0;
-  color: #cbd5e1;
-  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.55;
 }
 
 .auth-points {
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 
 .auth-point {
   display: grid;
   gap: 4px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .auth-point strong {
@@ -82,13 +81,14 @@
 
 .auth-header h2 {
   margin: 0;
-  font-size: 1.75rem;
-  color: #111827;
+  font-size: 1.5rem;
+  color: #172b4d;
 }
 
 .auth-header p {
   margin: 0;
-  color: #6b7280;
+  color: #5e6c84;
+  font-size: 0.92rem;
 }
 
 .form-group {
@@ -98,17 +98,19 @@
 
 .form-group label {
   font-weight: 700;
-  color: #111827;
-  font-size: 0.95rem;
+  color: #44546f;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .form-group input {
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
-  padding: 11px 13px;
+  border: 1px solid #dfe1e6;
+  border-radius: 6px;
+  padding: 9px 10px;
   font-size: 1rem;
-  background: #ffffff;
-  color: #111827;
+  background: #fafbfc;
+  color: #172b4d;
 }
 
 .form-group input:focus {
@@ -118,28 +120,28 @@
 }
 
 .error-message {
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid #fecaca;
-  background: #fef2f2;
-  color: #991b1b;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ffd5d2;
+  background: #ffebe6;
+  color: #ae2a19;
 }
 
 .success-message {
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid #bbf7d0;
-  background: #f0fdf4;
-  color: #166534;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #abf5d1;
+  background: #e3fcef;
+  color: #006644;
 }
 
 .register-form button {
-  border: 1px solid #111827;
-  border-radius: 10px;
-  padding: 11px 14px;
-  background: #111827;
+  border: 1px solid #0c66e4;
+  border-radius: 6px;
+  padding: 9px 12px;
+  background: #0c66e4;
   color: #ffffff;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
 }
@@ -152,15 +154,15 @@
 .auth-switch {
   margin: 0;
   text-align: center;
-  color: #6b7280;
-  font-size: 0.95rem;
+  color: #5e6c84;
+  font-size: 0.9rem;
 }
 
 .auth-switch-button {
   border: 0;
   padding: 0;
   background: transparent;
-  color: #111827;
+  color: #0c66e4;
   font: inherit;
   font-weight: 700;
   cursor: pointer;

@@ -3,7 +3,6 @@ import './ProjectList.css'
 import { useState } from 'react'
 
 export default function ProjectList({
-  editingProjectId,
   onEdit,
   onMoveProject,
   onSearchChange,
@@ -182,7 +181,7 @@ export default function ProjectList({
                             }
                             onClick={() => onEdit(project)}
                           >
-                            {editingProjectId === project.id ? 'Editing' : 'Edit'}
+                            Edit
                           </button>
                           <button
                             className="ghost-button ghost-danger"

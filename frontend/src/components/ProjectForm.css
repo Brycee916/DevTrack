@@ -1,40 +1,58 @@
 .project-form {
   display: grid;
-  gap: 18px;
+  gap: 14px;
 }
 
 .editor-panel {
   position: sticky;
-  top: 20px;
+  top: 16px;
+}
+
+.editor-modal-panel {
+  padding: 18px;
 }
 
 .panel-copy {
-  margin: 8px 0 0;
-  color: #6b7280;
-  line-height: 1.55;
+  margin: 6px 0 0;
+  color: #5e6c84;
+  line-height: 1.45;
+  font-size: 0.86rem;
+}
+
+.modal-close-button {
+  border: 1px solid #dfe1e6;
+  border-radius: 6px;
+  padding: 8px 10px;
+  background: #ffffff;
+  color: #172b4d;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .form-actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .form-grid {
   display: grid;
-  gap: 16px;
+  gap: 12px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .field {
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 
 .field span {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  color: #111827;
+  color: #44546f;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .field input,
@@ -42,17 +60,22 @@
 .field select {
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
-  padding: 11px 13px;
+  border: 1px solid #dfe1e6;
+  border-radius: 6px;
+  padding: 9px 10px;
   font: inherit;
-  color: #111827;
-  background: #f8fafc;
+  color: #172b4d;
+  background: #fafbfc;
 }
 
 .field textarea {
   resize: vertical;
-  min-height: 120px;
+  min-height: 112px;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #7a869a;
 }
 
 .field input:focus,
