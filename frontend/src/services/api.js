@@ -8,7 +8,9 @@ async function apiRequest(path, options = {}) {
     : null
 
   if (!response.ok) {
-    throw new Error(data?.error || 'Request failed')
+    const error = new Error(data?.error || 'Request failed')
+    error.status = response.status
+    throw error
   }
 
   return data
@@ -41,6 +43,17 @@ export function getProjects(token) {
 export function createProject(token, project) {
   return apiRequest('/project/', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(project),
+  })
+}
+
+export function updateProject(token, projectId, project) {
+  return apiRequest(`/project/updateProjectId=${projectId}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,

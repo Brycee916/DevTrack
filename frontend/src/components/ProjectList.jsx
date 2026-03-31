@@ -1,6 +1,13 @@
 import './ProjectList.css'
 
-export default function ProjectList({ projects, loading, onDelete }) {
+export default function ProjectList({
+  editingProjectId,
+  onEdit,
+  projects,
+  loading,
+  deletingProjectId,
+  onDelete,
+}) {
   if (loading) {
     return (
       <section className="panel">
@@ -47,13 +54,24 @@ export default function ProjectList({ projects, loading, onDelete }) {
                 <h3>{project.title}</h3>
                 <p>{project.description}</p>
               </div>
-              <button
-                className="ghost-button"
-                type="button"
-                onClick={() => onDelete(project.id)}
-              >
-                Delete
-              </button>
+              <div className="project-actions">
+                <button
+                  className="ghost-button"
+                  type="button"
+                  disabled={deletingProjectId === project.id}
+                  onClick={() => onEdit(project)}
+                >
+                  {editingProjectId === project.id ? 'Editing' : 'Edit'}
+                </button>
+                <button
+                  className="ghost-button"
+                  type="button"
+                  disabled={deletingProjectId === project.id}
+                  onClick={() => onDelete(project.id)}
+                >
+                  {deletingProjectId === project.id ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
             </div>
 
             <div className="project-meta">

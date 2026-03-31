@@ -5,13 +5,16 @@ const router = express.Router();
 
 // Create a project, make sure to check if selected status and priority is...
 router.post("/", authMiddleware, async (req, res) => {
-
     try {
         const userId = req.user.id; //comes from authMiddleware Jwt
         const { title, description, status, priority } = req.body;
 
+        if (!title || !description || !status || !priority) {
+            return res.status(400).json({ error: "All project fields are required" });
+        }
+
         // Create a new project in the table
-        project = await pool.query("INSERT INTO projects (user_id, title, description, status, priority) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+        const project = await pool.query("INSERT INTO projects (user_id, title, description, status, priority) VALUES ($1, $2, $3, $4, $5) RETURNING *",
             [userId, title, description, status, priority]
         );
         
@@ -19,7 +22,7 @@ router.post("/", authMiddleware, async (req, res) => {
         res.json(project.rows[0]);
 
     } catch (error) {
-        return res.status(401).json({ error: "Project saved" });
+        return res.status(500).json({ error: "Server error" });
     }
 
 });
@@ -50,10 +53,14 @@ router.delete("/deleteProjectId=:id", authMiddleware, async (req, res) => {
             [projectId, userId]
         );
 
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: "Project not found" });
+        }
+
         res.json({ success: "Project deleted" });
 
     } catch (error) {
-        return res.status(404).json({ error: "Server error" });
+        return res.status(500).json({ error: "Server error" });
     }
 
 });
@@ -65,12 +72,22 @@ router.put("/updateProjectId=:id", authMiddleware, async (req, res) => {
     const { title, description, status, priority } = req.body;
 
     try {
-        const result = await pool.query("UPDATE projects SET title=$1, description=$2, status=$3, priority=$4 WHERE id=$5 and user_id=$6"
+        if (!title || !description || !status || !priority) {
+            return res.status(400).json({ error: "All project fields are required" });
+        }
+
+        const result = await pool.query(
+            "UPDATE projects SET title=$1, description=$2, status=$3, priority=$4 WHERE id=$5 AND user_id=$6 RETURNING *",
             [title, description, status, priority, projectId, userId]
         );
-        res.json({ success: "Project updated" });
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: "Project not found" });
+        }
+
+        res.json(result.rows[0]);
     } catch (error) {
-        return res.status(404).json({ error: "Server error" });
+        return res.status(500).json({ error: "Server error" });
     }
 });
 

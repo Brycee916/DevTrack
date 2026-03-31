@@ -29,8 +29,11 @@ export default function Login({ onSwitchToRegister, onLoginSuccess }) {
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
-        <h1>DevTrack Login</h1>
-        <p>Sign in to connect this frontend to your Express backend.</p>
+        <div className="auth-header">
+          <span className="auth-brand">DevTrack</span>
+          <h1>Sign in</h1>
+          <p>Access your workspace and manage projects securely.</p>
+        </div>
 
         {error && <div className="error-message">{error}</div>}
         {success && <div className="success-message">{success}</div>}

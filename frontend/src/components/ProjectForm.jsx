@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './ProjectForm.css'
 
 const initialForm = {
@@ -8,8 +8,27 @@ const initialForm = {
   priority: 'medium',
 }
 
-export default function ProjectForm({ onCreate, loading }) {
+export default function ProjectForm({
+  editingProject,
+  loading,
+  onCancelEdit,
+  onSubmitProject,
+}) {
   const [form, setForm] = useState(initialForm)
+
+  useEffect(() => {
+    if (editingProject) {
+      setForm({
+        title: editingProject.title || '',
+        description: editingProject.description || '',
+        status: editingProject.status || 'active',
+        priority: editingProject.priority || 'medium',
+      })
+      return
+    }
+
+    setForm(initialForm)
+  }, [editingProject])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -18,8 +37,11 @@ export default function ProjectForm({ onCreate, loading }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await onCreate(form)
-    setForm(initialForm)
+    const wasSaved = await onSubmitProject(form)
+
+    if (wasSaved && !editingProject) {
+      setForm(initialForm)
+    }
   }
 
   return (
@@ -27,7 +49,11 @@ export default function ProjectForm({ onCreate, loading }) {
       <div className="panel-header">
         <div>
           <p className="eyebrow">Project Intake</p>
-          <h2>Start something worth shipping</h2>
+          <h2>
+            {editingProject
+              ? 'Update the details and keep it moving'
+              : 'Start something worth shipping'}
+          </h2>
         </div>
       </div>
 
@@ -74,9 +100,28 @@ export default function ProjectForm({ onCreate, loading }) {
           </label>
         </div>
 
-        <button className="primary-button" type="submit" disabled={loading}>
-          {loading ? 'Saving project...' : 'Create project'}
-        </button>
+        <div className="form-actions">
+          <button className="primary-button" type="submit" disabled={loading}>
+            {loading
+              ? editingProject
+                ? 'Updating project...'
+                : 'Saving project...'
+              : editingProject
+                ? 'Update project'
+                : 'Create project'}
+          </button>
+
+          {editingProject && (
+            <button
+              className="ghost-button"
+              type="button"
+              disabled={loading}
+              onClick={onCancelEdit}
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </form>
     </section>
   )

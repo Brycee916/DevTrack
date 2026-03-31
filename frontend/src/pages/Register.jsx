@@ -41,8 +41,11 @@ export default function Register({ onSwitchToLogin, onRegisterSuccess }) {
   return (
     <div className="register-container">
       <form onSubmit={handleSubmit} className="register-form">
-        <h1>Create Your Account</h1>
-        <p>Register a new DevTrack account to start managing your projects.</p>
+        <div className="auth-header">
+          <span className="auth-brand">DevTrack</span>
+          <h1>Create account</h1>
+          <p>Set up a workspace account for project tracking and reporting.</p>
+        </div>
 
         {error && <div className="error-message">{error}</div>}
         {success && <div className="success-message">{success}</div>}
