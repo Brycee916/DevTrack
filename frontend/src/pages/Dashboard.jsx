@@ -205,93 +205,90 @@ export default function Dashboard({ token, onLogout }) {
     { id: 'settings', label: 'Settings', iconClass: 'tab-icon-settings' },
   ]
 
+  const formattedDate = new Date().toLocaleDateString(undefined, {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  })
+
   return (
     <div className="dashboard-shell">
       <header className="workspace-topbar panel">
-        <div className="workspace-branding">
-          <div className="workspace-logo">DT</div>
-          <div>
-            <p className="eyebrow">Portfolio Workspace</p>
-            <h1>DevTrack</h1>
+        <div className="workspace-topbar-left">
+          <div className="workspace-branding">
+            <div className="workspace-logo">DT</div>
+            <div>
+              <h1>DevTrack</h1>
+            </div>
           </div>
+
+          <nav className="workspace-topnav" aria-label="Primary">
+            {viewTabs.map((tab) => (
+              <button
+                key={tab.id}
+                className={`workspace-topnav-link ${
+                  activeView === tab.id ? 'workspace-topnav-link-active' : ''
+                }`}
+                type="button"
+                onClick={() => setActiveView(tab.id)}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
         </div>
 
-        <div className="workspace-topbar-copy">
-          <strong>Delivery board</strong>
-          <span>Project visibility for product, operations, and client work.</span>
-        </div>
+        <div className="workspace-topbar-right">
+          <label className="workspace-search" aria-label="Search workspace">
+            <span className="workspace-search-icon" />
+            <input type="search" placeholder="Search..." />
+          </label>
 
-        <div className="workspace-actions">
-          <button className="primary-button" type="button" onClick={handleOpenCreate}>
-            Create project
+          <div className="workspace-toolbar-icons" aria-label="Workspace tools">
+            <button className="workspace-icon-button" type="button" aria-label="Notifications">
+              <span className="workspace-icon workspace-icon-bell" />
+            </button>
+            <button className="workspace-icon-button" type="button" aria-label="Help">
+              <span className="workspace-icon workspace-icon-help" />
+            </button>
+            <button className="workspace-icon-button" type="button" aria-label="Settings">
+              <span className="workspace-icon workspace-icon-settings" />
+            </button>
+          </div>
+
+          <button className="primary-button workspace-create-button" type="button" onClick={handleOpenCreate}>
+            Create
           </button>
-          <button className="ghost-button" type="button" onClick={loadProjects}>
-            Refresh board
-          </button>
-          <button className="ghost-button" type="button" onClick={onLogout}>
-            Log out
+
+          <button className="workspace-avatar" type="button" aria-label="Profile">
+            DT
           </button>
         </div>
       </header>
 
-      <section className="workspace-header panel">
-        <div className="workspace-header-main">
-          <div className="workspace-breadcrumbs" aria-label="Breadcrumb">
-            <span>Workspaces</span>
-            <span className="breadcrumb-separator">/</span>
-            <span>Portfolio</span>
-            <span className="breadcrumb-separator">/</span>
-            <span className="breadcrumb-current">DevTrack</span>
-          </div>
-
-          <div className="workspace-title-row">
-            <div>
-              <p className="eyebrow">Operations Board</p>
-              <h2>Delivery management</h2>
-            </div>
-            <div className="workspace-title-meta">
-              <span className="workspace-chip">Q2 Active Planning</span>
-              <span className="workspace-chip workspace-chip-muted">Investor Demo Ready</span>
-            </div>
-          </div>
-
-          <p className="workspace-summary">
-            Centralize active delivery work, surface high-priority projects, and
-            keep execution status ready for leadership reviews.
-          </p>
-        </div>
-
-        <div className="workspace-tabs" role="tablist" aria-label="Workspace views">
-          {viewTabs.map((tab) => (
-            <button
-              key={tab.id}
-              className={`workspace-tab ${
-                activeView === tab.id ? 'workspace-tab-active' : ''
-              }`}
-              type="button"
-              role="tab"
-              aria-selected={activeView === tab.id}
-              onClick={() => setActiveView(tab.id)}
-            >
-              <span className={`workspace-tab-icon ${tab.iconClass}`} />
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </section>
-
-      <div className="workspace-layout">
+      <div
+        className={`workspace-layout ${activeView === 'board' ? 'workspace-layout-board' : ''}`}
+      >
         <aside className="workspace-sidebar panel">
-          <div className="sidebar-section">
-            <p className="eyebrow">Workspace</p>
-            <h2>Portfolio operations</h2>
-            <p className="sidebar-copy">
-              Manage delivery status, review priorities, and keep project
-              execution visible across teams.
-            </p>
+          <div className="workspace-sidebar-brand">
+            <div className="workspace-sidebar-avatar">DT</div>
+            <div>
+              <h2>Engineering Team</h2>
+              <p>Premium Workspace</p>
+            </div>
+          </div>
+
+          <div className="sidebar-pane-actions">
+            <button className="primary-button sidebar-primary-button" type="button" onClick={handleOpenCreate}>
+              New Project
+            </button>
           </div>
 
           <nav className="sidebar-nav">
+            <button className="sidebar-nav-item sidebar-nav-item-active" type="button">
+              Overview
+            </button>
             <button
               className={`sidebar-nav-item ${
                 activeView === 'board' ? 'sidebar-nav-item-active' : ''
@@ -299,7 +296,6 @@ export default function Dashboard({ token, onLogout }) {
               type="button"
               onClick={() => setActiveView('board')}
             >
-              <span className="sidebar-nav-icon" />
               Board
             </button>
             <button
@@ -309,7 +305,6 @@ export default function Dashboard({ token, onLogout }) {
               type="button"
               onClick={() => setActiveView('timeline')}
             >
-              <span className="sidebar-nav-icon" />
               Timeline
             </button>
             <button
@@ -319,12 +314,10 @@ export default function Dashboard({ token, onLogout }) {
               type="button"
               onClick={() => setActiveView('reports')}
             >
-              <span className="sidebar-nav-icon" />
-              Reporting
+              Reports
             </button>
             <button className="sidebar-nav-item" type="button">
-              <span className="sidebar-nav-icon" />
-              Team
+              Analytics
             </button>
             <button
               className={`sidebar-nav-item ${
@@ -333,45 +326,47 @@ export default function Dashboard({ token, onLogout }) {
               type="button"
               onClick={() => setActiveView('settings')}
             >
-              <span className="sidebar-nav-icon" />
-              Settings
+              Workspace Settings
             </button>
           </nav>
 
-          <div className="sidebar-section">
-            <p className="eyebrow">Metrics</p>
-            <div className="stats-grid">
-              <article className="stat-card">
+          <div className="sidebar-stats-card">
+            <p className="eyebrow">Workspace snapshot</p>
+            <div className="sidebar-stats-list">
+              <div className="sidebar-stat-row">
                 <span>Total projects</span>
                 <strong>{projects.length}</strong>
-              </article>
-              <article className="stat-card">
+              </div>
+              <div className="sidebar-stat-row">
                 <span>Open</span>
                 <strong>{openCount}</strong>
-              </article>
-              <article className="stat-card">
+              </div>
+              <div className="sidebar-stat-row">
                 <span>Completed</span>
                 <strong>{completedCount}</strong>
-              </article>
-              <article className="stat-card">
+              </div>
+              <div className="sidebar-stat-row">
                 <span>High priority</span>
                 <strong>{highPriorityCount}</strong>
-              </article>
+              </div>
             </div>
           </div>
 
-          <div className="sidebar-section">
-            <p className="eyebrow">Quick actions</p>
-            <div className="sidebar-action-list">
-              <button className="sidebar-action-button" type="button" onClick={handleOpenCreate}>
-                <span className="sidebar-action-icon" />
-                New project
-              </button>
-              <button className="sidebar-action-button" type="button" onClick={loadProjects}>
-                <span className="sidebar-action-icon" />
-                Refresh data
-              </button>
-            </div>
+          <div className="sidebar-upgrade-card">
+            <p className="eyebrow">Upgrade Plan</p>
+            <p>Get unlimited boards and advanced visibility tools.</p>
+            <button className="primary-button sidebar-upgrade-button" type="button">
+              Upgrade
+            </button>
+          </div>
+
+          <div className="sidebar-footer">
+            <button className="sidebar-footer-link" type="button">
+              Help Center
+            </button>
+            <button className="sidebar-footer-link" type="button" onClick={onLogout}>
+              Log out
+            </button>
           </div>
         </aside>
 
@@ -381,6 +376,24 @@ export default function Dashboard({ token, onLogout }) {
 
           {activeView === 'board' ? (
             <div className="dashboard-grid">
+              <section className="board-page-header">
+                <div>
+                  <h2>Development Board</h2>
+                  <p>{formattedDate}</p>
+                </div>
+                <div className="board-page-actions">
+                  <button
+                    className="ghost-button board-page-filter"
+                    type="button"
+                    onClick={() => setStatusFilter('all')}
+                  >
+                    Reset Filters
+                  </button>
+                  <button className="primary-button" type="button" onClick={handleOpenCreate}>
+                    Create Project
+                  </button>
+                </div>
+              </section>
               <ProjectList
                 onEdit={handleEditProject}
                 onMoveProject={handleMoveProject}

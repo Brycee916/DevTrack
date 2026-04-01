@@ -165,9 +165,9 @@ export default function ProjectList({
                             ? 'Moving card...'
                             : `Updated view ${new Date(project.created_at).toLocaleDateString()}`}
                         </span>
-                        <div className="project-actions">
+                        <div className="project-card-actions">
                           <button
-                            className="ghost-button"
+                            className="project-action-button"
                             type="button"
                             disabled={
                               deletingProjectId === project.id ||
@@ -178,7 +178,7 @@ export default function ProjectList({
                             Edit
                           </button>
                           <button
-                            className="ghost-button ghost-danger"
+                            className="project-action-button project-action-delete"
                             type="button"
                             disabled={
                               deletingProjectId === project.id ||
