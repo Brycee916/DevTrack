@@ -1,6 +1,10 @@
 import './ProjectList.css'
 
 import { useState } from 'react'
+import {
+  getProjectStatusLabel,
+  PROJECT_STATUSES,
+} from '../constants/projectStatus'
 
 export default function ProjectList({
   onEdit,
@@ -18,19 +22,6 @@ export default function ProjectList({
 }) {
   const [draggedProjectId, setDraggedProjectId] = useState(null)
   const [activeDropColumn, setActiveDropColumn] = useState('')
-
-  const columns = [
-    {
-      key: 'active',
-      title: 'In Progress',
-      description: 'Projects currently moving through delivery.',
-    },
-    {
-      key: 'complete',
-      title: 'Completed',
-      description: 'Finished work ready for reporting or handoff.',
-    },
-  ]
 
   if (loading) {
     return (
@@ -75,14 +66,17 @@ export default function ProjectList({
             onChange={(e) => onStatusFilterChange(e.target.value)}
           >
             <option value="all">All statuses</option>
-            <option value="active">Active</option>
-            <option value="complete">Complete</option>
+            {PROJECT_STATUSES.map((status) => (
+              <option key={status.key} value={status.key}>
+                {status.label}
+              </option>
+            ))}
           </select>
         </label>
       </div>
 
       <div className="board-columns">
-        {columns.map((column) => {
+        {PROJECT_STATUSES.map((column) => {
           const columnProjects = projects.filter((project) => project.status === column.key)
 
           return (
@@ -118,7 +112,7 @@ export default function ProjectList({
             >
               <header className="board-column-header">
                 <div>
-                  <h3>{column.title}</h3>
+                  <h3>{column.boardTitle}</h3>
                   <p>{column.description}</p>
                 </div>
                 <span className="column-count">{columnProjects.length}</span>
@@ -158,7 +152,7 @@ export default function ProjectList({
 
                       <div className="project-meta">
                         <span className={`badge status-${project.status}`}>
-                          {project.status}
+                          {getProjectStatusLabel(project.status)}
                         </span>
                         <span className={`badge priority-${project.priority}`}>
                           {project.priority} priority

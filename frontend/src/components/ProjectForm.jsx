@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import './ProjectForm.css'
+import { PROJECT_STATUSES } from '../constants/projectStatus'
 
 const initialForm = {
   title: '',
   description: '',
-  status: 'active',
+  status: 'backlog',
   priority: 'medium',
 }
 
@@ -23,7 +24,7 @@ export default function ProjectForm({
       setForm({
         title: editingProject.title || '',
         description: editingProject.description || '',
-        status: editingProject.status || 'active',
+        status: editingProject.status || 'backlog',
         priority: editingProject.priority || 'medium',
       })
       return
@@ -107,8 +108,11 @@ export default function ProjectForm({
           <label className="field">
             <span>Status</span>
             <select name="status" value={form.status} onChange={handleChange}>
-              <option value="active">Active</option>
-              <option value="complete">Complete</option>
+              {PROJECT_STATUSES.map((status) => (
+                <option key={status.key} value={status.key}>
+                  {status.label}
+                </option>
+              ))}
             </select>
           </label>
 

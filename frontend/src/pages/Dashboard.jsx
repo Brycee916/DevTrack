@@ -1,6 +1,7 @@
 import { useEffect, useEffectEvent, useState } from 'react'
 import ProjectForm from '../components/ProjectForm'
 import ProjectList from '../components/ProjectList'
+import { getProjectStatusLabel } from '../constants/projectStatus'
 import {
   createProject,
   deleteProject,
@@ -150,11 +151,7 @@ export default function Dashboard({ token, onLogout }) {
         setEditingProject(updatedProject)
       }
 
-      setSuccess(
-        nextStatus === 'complete'
-          ? 'Project moved to Completed.'
-          : 'Project moved to In Progress.'
-      )
+      setSuccess(`Project moved to ${getProjectStatusLabel(nextStatus)}.`)
       return true
     } catch (err) {
       if (err.status === 401) {
@@ -190,7 +187,7 @@ export default function Dashboard({ token, onLogout }) {
   }
 
   const completedCount = projects.filter((project) => project.status === 'complete').length
-  const activeCount = projects.length - completedCount
+  const openCount = projects.length - completedCount
   const highPriorityCount = projects.filter((project) => project.priority === 'high').length
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
@@ -349,8 +346,8 @@ export default function Dashboard({ token, onLogout }) {
                 <strong>{projects.length}</strong>
               </article>
               <article className="stat-card">
-                <span>Active</span>
-                <strong>{activeCount}</strong>
+                <span>Open</span>
+                <strong>{openCount}</strong>
               </article>
               <article className="stat-card">
                 <span>Completed</span>
@@ -422,7 +419,9 @@ export default function Dashboard({ token, onLogout }) {
                         <h3>{project.title}</h3>
                         <p>{project.description}</p>
                         <div className="timeline-meta">
-                          <span className={`badge status-${project.status}`}>{project.status}</span>
+                          <span className={`badge status-${project.status}`}>
+                            {getProjectStatusLabel(project.status)}
+                          </span>
                           <span className={`badge priority-${project.priority}`}>
                             {project.priority} priority
                           </span>
@@ -462,7 +461,7 @@ export default function Dashboard({ token, onLogout }) {
                 <article className="report-card">
                   <div className="report-card-icon report-icon-load" />
                   <span>Open execution load</span>
-                  <strong>{activeCount}</strong>
+                  <strong>{openCount}</strong>
                 </article>
               </div>
             </section>
