@@ -65,7 +65,7 @@ router.delete("/deleteProjectId=:id", authMiddleware, async (req, res) => {
 
 });
 
-// Update project - status (active/complete), priority (low/medium/high). in frontend, if it's active then shouldnt need priority
+// Update project - status (backlog/active/inReview/complete), priority (low/medium/high). in frontend, if it's active then shouldnt need priority
 router.put("/updateProjectId=:id", authMiddleware, async (req, res) => {
     const userId = req.user.id;
     const projectId = req.params.id;
